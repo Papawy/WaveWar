@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BtnOverring : MonoBehaviour {
 
@@ -21,6 +22,16 @@ public class BtnOverring : MonoBehaviour {
 	public void OnPointerExit()
 	{
 		m_hoverState = false;
+	}
+
+	public void OnSelected()
+	{
+		m_isMoving = 1;
+	}
+
+	public void OnDeselected()
+	{
+		m_isMoving = -1;
 	}
 
 	// Use this for initialization
@@ -61,7 +72,7 @@ public class BtnOverring : MonoBehaviour {
 		}
 		else if(m_isMoving == -1)
 		{
-			if (Vector3.Distance(m_basePos, this.transform.position) < 0.2)
+			if (Vector3.Distance(m_basePos, this.transform.position) < 0.1)
 			{
 				this.transform.position = m_basePos;
 				m_isMoving = 0;
