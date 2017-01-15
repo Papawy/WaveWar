@@ -5,12 +5,9 @@ using UnityEngine;
 public class MenuSelect : MonoBehaviour {
 
 	public UnityEngine.UI.Text[] textArray = null;
-	public float TimeInterval = 0.5f;
 
 
-	public int m_currMenSel = 0;
-
-	private float m_selTime = 0.0f;
+	private int m_currMenSel = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -20,38 +17,36 @@ public class MenuSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Time.time - m_selTime > TimeInterval)
+		if (InputManager.Instance.GetKeyDown("back"))
 		{
-			if (Input.GetAxis("Vertical") < -0.1)
+			if (m_currMenSel < textArray.Length - 1)
 			{
-				if (m_currMenSel < textArray.Length - 1)
-				{
-					m_currMenSel++;
-					textArray[m_currMenSel - 1].GetComponent<BtnOverring>().OnDeselected();
-				}
-				else
-				{
-					m_currMenSel = 0;
-					textArray[textArray.Length - 1].GetComponent<BtnOverring>().OnDeselected();
-				}
+				m_currMenSel++;
+				textArray[m_currMenSel - 1].GetComponent<BtnOverring>().OnDeselected();
 			}
-			else if (Input.GetAxis("Vertical") > 0.1)
+			else
 			{
-				if (m_currMenSel > 0)
-				{
-					m_currMenSel--;
-					textArray[m_currMenSel + 1].GetComponent<BtnOverring>().OnDeselected();
-				}
-				else
-				{
-					m_currMenSel = textArray.Length-1;
-					textArray[0].GetComponent<BtnOverring>().OnDeselected();
-				}
+				m_currMenSel = 0;
+				textArray[textArray.Length - 1].GetComponent<BtnOverring>().OnDeselected();
 			}
-			textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
-			m_selTime = Time.time;
 		}
-
-
+		else if (InputManager.Instance.GetKeyDown("forward"))
+		{
+			if (m_currMenSel > 0)
+			{
+				m_currMenSel--;
+				textArray[m_currMenSel + 1].GetComponent<BtnOverring>().OnDeselected();
+			}
+			else
+			{
+				m_currMenSel = textArray.Length-1;
+				textArray[0].GetComponent<BtnOverring>().OnDeselected();
+			}
+		}
+		else if (InputManager.Instance.GetKeyDown("accept"))
+		{
+			BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
+		}
+		textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
 	}
 }

@@ -9,10 +9,16 @@ public class BtnOverring : MonoBehaviour {
 	public float Distance = 0.7f;
 	public float Speed = 5.0f;
 
+	public Color SelectColor = new Color(184, 42, 42);
+
+	public bool ActiveMouse = false;
+
 	private short m_isMoving = 0;
 	private Vector3 m_basePos;
 	private bool m_oldHoverState = false;
 	private bool m_hoverState = false;
+
+	private Color m_originalColor;
 
 	public void OnPointerEnter()
 	{
@@ -26,29 +32,36 @@ public class BtnOverring : MonoBehaviour {
 
 	public void OnSelected()
 	{
-		m_isMoving = 1;
+		if(!ActiveMouse)
+			m_isMoving = 1;
 	}
 
 	public void OnDeselected()
 	{
-		m_isMoving = -1;
+		if(!ActiveMouse)
+			m_isMoving = -1;
 	}
 
 	// Use this for initialization
 	void Start () {
 		m_basePos = this.transform.position;
 
-		EventTrigger.Entry pointerEnterEvent = new EventTrigger.Entry();
-		pointerEnterEvent.eventID = EventTriggerType.PointerEnter;
-		pointerEnterEvent.callback.AddListener((eventData) => { OnPointerEnter(); });
+		m_originalColor = this.GetComponent<Text>().color;
 
-		EventTrigger.Entry pointerExitEvent = new EventTrigger.Entry();
-		pointerExitEvent.eventID = EventTriggerType.PointerExit;
-		pointerExitEvent.callback.AddListener((eventData) => { OnPointerExit(); });
+		if(ActiveMouse)
+		{
+			EventTrigger.Entry pointerEnterEvent = new EventTrigger.Entry();
+			pointerEnterEvent.eventID = EventTriggerType.PointerEnter;
+			pointerEnterEvent.callback.AddListener((eventData) => { OnPointerEnter(); });
 
-		this.gameObject.AddComponent < EventTrigger >();
-		this.gameObject.GetComponent<EventTrigger>().triggers.Add(pointerEnterEvent);
-		this.gameObject.GetComponent<EventTrigger>().triggers.Add(pointerExitEvent);
+			EventTrigger.Entry pointerExitEvent = new EventTrigger.Entry();
+			pointerExitEvent.eventID = EventTriggerType.PointerExit;
+			pointerExitEvent.callback.AddListener((eventData) => { OnPointerExit(); });
+
+			this.gameObject.AddComponent<EventTrigger>();
+			this.gameObject.GetComponent<EventTrigger>().triggers.Add(pointerEnterEvent);
+			this.gameObject.GetComponent<EventTrigger>().triggers.Add(pointerExitEvent);
+		}
 	}
 	
 	// Update is called once per frame
@@ -66,7 +79,10 @@ public class BtnOverring : MonoBehaviour {
 		if (m_isMoving == 1)
 		{
 			if (Vector3.Distance(m_basePos, this.transform.position) > Distance)
+			{
+				this.GetComponent<Text>().color = SelectColor;
 				m_isMoving = 0;
+			}
 			else
 				this.transform.Translate(Vector3.back * Speed * Time.deltaTime);
 		}
@@ -74,6 +90,7 @@ public class BtnOverring : MonoBehaviour {
 		{
 			if (Vector3.Distance(m_basePos, this.transform.position) < 0.1)
 			{
+				this.GetComponent<Text>().color = m_originalColor;
 				this.transform.position = m_basePos;
 				m_isMoving = 0;
 			}
