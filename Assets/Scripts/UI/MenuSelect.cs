@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class MenuSelect : MonoBehaviour {
 
-	public UnityEngine.UI.Text[] textArray = null;
+	protected List<GameObject> textArray = null;
 
 
 	private int m_currMenSel = 0;
 
 	// Use this for initialization
 	void Start () {
-		if (textArray.Length == 0)
+
+		textArray = new List<GameObject>();
+
+		foreach(Transform child in transform)
+		{
+			if(child.gameObject.tag == "button")
+			{
+				textArray.Add(child.gameObject);
+			}
+				
+		}
+
+		if (textArray.Count == 0)
 			this.enabled = false;
 	}
 	
@@ -19,7 +31,7 @@ public class MenuSelect : MonoBehaviour {
 	void Update () {
 		if (InputManager.Instance.GetKeyDown("back"))
 		{
-			if (m_currMenSel < textArray.Length - 1)
+			if (m_currMenSel < textArray.Count - 1)
 			{
 				m_currMenSel++;
 				textArray[m_currMenSel - 1].GetComponent<BtnOverring>().OnDeselected();
@@ -27,7 +39,7 @@ public class MenuSelect : MonoBehaviour {
 			else
 			{
 				m_currMenSel = 0;
-				textArray[textArray.Length - 1].GetComponent<BtnOverring>().OnDeselected();
+				textArray[textArray.Count - 1].GetComponent<BtnOverring>().OnDeselected();
 			}
 		}
 		else if (InputManager.Instance.GetKeyDown("forward"))
@@ -39,13 +51,14 @@ public class MenuSelect : MonoBehaviour {
 			}
 			else
 			{
-				m_currMenSel = textArray.Length-1;
+				m_currMenSel = textArray.Count - 1;
 				textArray[0].GetComponent<BtnOverring>().OnDeselected();
 			}
 		}
 		else if (InputManager.Instance.GetKeyDown("accept"))
 		{
-			BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
+			//BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
+			MainMenuSelect.Instance.OnMenuSelect(textArray[m_currMenSel]);
 		}
 		textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
 	}

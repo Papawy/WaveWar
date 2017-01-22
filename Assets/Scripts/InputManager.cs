@@ -20,7 +20,8 @@ public class InputManager : MonoBehaviour {
 		m_keyDict.Add("left", (KeyCode)PlayerPrefs.GetInt("left", (int)KeyCode.Q));
 		m_keyDict.Add("right", (KeyCode)PlayerPrefs.GetInt("right", (int)KeyCode.D));
 		m_keyDict.Add("jump", (KeyCode)PlayerPrefs.GetInt("jump", (int)KeyCode.Space));
-		m_keyDict.Add("accept", (KeyCode)PlayerPrefs.GetInt("jump", (int)KeyCode.Return));
+		m_keyDict.Add("accept", (KeyCode)PlayerPrefs.GetInt("accept", (int)KeyCode.Return));
+		m_keyDict.Add("menuBack", (KeyCode)PlayerPrefs.GetInt("menuBack", (int)KeyCode.Backspace));
 	}
 
 	public static InputManager Instance

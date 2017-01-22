@@ -84,7 +84,9 @@ public class BtnOverring : MonoBehaviour {
 				m_isMoving = 0;
 			}
 			else
+			{
 				this.transform.Translate(Vector3.back * Speed * Time.deltaTime);
+			}
 		}
 		else if(m_isMoving == -1)
 		{
