@@ -33,6 +33,15 @@ public class MainMenuSelect : MonoBehaviour {
 		{
 			JumpToMenu(GameObject.Find("savegames_menu"));
 		}
+		else if(button.name == "btn_new_game")
+		{
+			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+			sceneOp.allowSceneActivation = true;
+		}
+		else if(button.name == "btn_quit")
+		{
+			Application.Quit();
+		}
 	}
 
 	void Awake()

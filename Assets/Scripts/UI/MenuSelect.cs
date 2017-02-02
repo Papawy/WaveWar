@@ -57,7 +57,7 @@ public class MenuSelect : MonoBehaviour {
 		}
 		else if (InputManager.Instance.GetKeyDown("accept"))
 		{
-			//BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
+			BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
 			MainMenuSelect.Instance.OnMenuSelect(textArray[m_currMenSel]);
 		}
 		textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
