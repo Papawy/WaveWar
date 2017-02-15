@@ -30,6 +30,11 @@ public class BtnOverring : MonoBehaviour {
 		m_hoverState = false;
 	}
 
+	public bool IsMoving()
+	{
+		return m_isMoving != 0;
+	}
+
 	public void OnSelected()
 	{
 		if(!ActiveMouse)

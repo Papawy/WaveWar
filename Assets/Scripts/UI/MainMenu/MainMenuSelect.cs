@@ -12,8 +12,6 @@ public class MainMenuSelect : MonoBehaviour {
 
 	private AudioSource source;
 
-	private float m_timer;
-
 	private static MainMenuSelect m_instance = null;
 	private static object _lock = new object();
 
@@ -53,7 +51,6 @@ public class MainMenuSelect : MonoBehaviour {
 		m_previousMenu = null;
 
 		source = gameObject.GetComponent<AudioSource>();
-		m_timer = 0.0f;
 	}
 
 	// Use this for initialization
@@ -62,7 +59,7 @@ public class MainMenuSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(InputManager.Instance.GetKeyDown("accept") && !m_mainMenuStarted)
+		if(TeamUtility.IO.InputManager.GetButton("Accept") && !m_mainMenuStarted)
 		{
 			foreach (MonoBehaviour script in GameObject.Find("main_menu").GetComponents<MonoBehaviour>())
 			{
@@ -70,15 +67,13 @@ public class MainMenuSelect : MonoBehaviour {
 			}
 			GameObject.Find("main_menu").GetComponent<Canvas>().enabled = true;
 			MoveCameraTo(GameObject.Find("main_menu").transform.FindChild("CameraMarker"), 1);
-			m_timer = Time.time;
 			m_mainMenuStarted = true;
 
 			m_activeMenu = GameObject.Find("main_menu");
 		}
 		
-		if(InputManager.Instance.GetKeyDown("menuBack") && m_activeMenu != null)
+		if(TeamUtility.IO.InputManager.GetButton("Cancel") && m_activeMenu != null)
 		{
-			Debug.Log("menu back");
 			if(m_activeMenu != GameObject.Find("main_menu"))
 			{
 				source.PlayOneShot(backSound, Volume);
@@ -143,6 +138,8 @@ public class MainMenuSelect : MonoBehaviour {
 		{
 			t += Time.deltaTime * (Time.timeScale / lerpSpeed);
 
+			if (obj == null)
+				yield return 0;
 			obj.transform.position = Vector3.Lerp(startingPos, finish.position, t);
 			obj.transform.rotation = Quaternion.Lerp(startingRot, finish.rotation, t);
 			yield return 0;

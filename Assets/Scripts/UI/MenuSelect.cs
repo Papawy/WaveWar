@@ -9,6 +9,8 @@ public class MenuSelect : MonoBehaviour {
 
 	private int m_currMenSel = 0;
 
+	private float m_timer = 0.0f;
+
 	// Use this for initialization
 	void Start () {
 
@@ -29,37 +31,42 @@ public class MenuSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (InputManager.Instance.GetKeyDown("back"))
+		if(!textArray[m_currMenSel].GetComponent<BtnOverring>().IsMoving())
 		{
-			if (m_currMenSel < textArray.Count - 1)
+			if (TeamUtility.IO.InputManager.GetAxisRaw("MenuVertical") == -1 && Time.time - m_timer > 0.20)
 			{
-				m_currMenSel++;
-				textArray[m_currMenSel - 1].GetComponent<BtnOverring>().OnDeselected();
+				if (m_currMenSel < textArray.Count - 1)
+				{
+					m_currMenSel++;
+					textArray[m_currMenSel - 1].GetComponent<BtnOverring>().OnDeselected();
+				}
+				else
+				{
+					m_currMenSel = 0;
+					textArray[textArray.Count - 1].GetComponent<BtnOverring>().OnDeselected();
+				}
+				m_timer = Time.time;
 			}
-			else
+			else if (TeamUtility.IO.InputManager.GetAxisRaw("MenuVertical") == 1 && Time.time - m_timer > 0.20)
 			{
-				m_currMenSel = 0;
-				textArray[textArray.Count - 1].GetComponent<BtnOverring>().OnDeselected();
+				if (m_currMenSel > 0)
+				{
+					m_currMenSel--;
+					textArray[m_currMenSel + 1].GetComponent<BtnOverring>().OnDeselected();
+				}
+				else
+				{
+					m_currMenSel = textArray.Count - 1;
+					textArray[0].GetComponent<BtnOverring>().OnDeselected();
+				}
+				m_timer = Time.time;
 			}
+			else if (TeamUtility.IO.InputManager.GetButtonDown("Accept"))
+			{
+				BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
+				MainMenuSelect.Instance.OnMenuSelect(textArray[m_currMenSel]);
+			}
+			textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
 		}
-		else if (InputManager.Instance.GetKeyDown("forward"))
-		{
-			if (m_currMenSel > 0)
-			{
-				m_currMenSel--;
-				textArray[m_currMenSel + 1].GetComponent<BtnOverring>().OnDeselected();
-			}
-			else
-			{
-				m_currMenSel = textArray.Count - 1;
-				textArray[0].GetComponent<BtnOverring>().OnDeselected();
-			}
-		}
-		else if (InputManager.Instance.GetKeyDown("accept"))
-		{
-			BroadcastMessage("OnMenuSelect", textArray[m_currMenSel], SendMessageOptions.DontRequireReceiver);
-			MainMenuSelect.Instance.OnMenuSelect(textArray[m_currMenSel]);
-		}
-		textArray[m_currMenSel].GetComponent<BtnOverring>().OnSelected();
 	}
 }
