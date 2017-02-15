@@ -1,22 +1,27 @@
 fileFormatVersion: 2
-guid: f7c9ff611d9ce624387c708fb3cecaa0
-timeCreated: 1486245392
+guid: 7021357555200de4bba21993b8fc1b54
+timeCreated: 1486748561
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pCube1
-    100004: pCube2
+    100002: Camera
+    100004: Cube
+    100006: Hemi
+    100008: Hemi.001
+    100010: Hemi.002
+    100012: Lamp
     400000: //RootNode
-    400002: pCube1
-    400004: pCube2
-    2300000: pCube1
-    2300002: pCube2
-    3300000: pCube1
-    3300002: pCube2
-    4300000: pCube1
-    4300002: pCube2
+    400002: Camera
+    400004: Cube
+    400006: Hemi
+    400008: Hemi.001
+    400010: Hemi.002
+    400012: Lamp
+    2300000: Cube
+    3300000: Cube
+    4300000: Cube
   materials:
     importMaterials: 1
     materialName: 0
