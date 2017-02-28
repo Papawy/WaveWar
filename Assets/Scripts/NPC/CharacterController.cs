@@ -40,7 +40,6 @@ public class CharacterController : MonoBehaviour {
 	public void MoveTo(Vector3 position)
 	{
 		nextPos = new Vector3(position.x, gameObject.transform.position.y, position.z);
-		Debug.Log("nextPos : " + nextPos.x + ";" + nextPos.y + ";" + nextPos.z);
 		moving = true;
 	}
 }
