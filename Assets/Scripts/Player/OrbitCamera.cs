@@ -64,7 +64,7 @@ public class OrbitCamera : MonoBehaviour {
 			}
 			Vector3 negDistance = new Vector3(0.0f, 0.0f, -m_distance);
 			Vector3 tarPos = m_target.position + Vector3.up;
-			Vector3 position = rotation * negDistance + tarPos + this.transform.right;
+			Vector3 position = rotation * negDistance + tarPos + this.transform.up*0.5f;
 
 			transform.rotation = rotation;
 			transform.position = position;

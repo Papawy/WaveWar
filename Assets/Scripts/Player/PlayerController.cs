@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	public float Speed = 1.0f;
+	public float Speed = 4.0f;
 
 	Animator anim;
 
@@ -16,34 +16,25 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float move = TeamUtility.IO.InputManager.GetAxisRaw("Vertical");
+		float move = (Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")) + Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")));
+		move = Mathf.Clamp(move, 0, 1);
 		anim.SetFloat("Speed", move);
-		Quaternion camRot = Quaternion.Euler(0.0f, Camera.main.transform.rotation.eulerAngles.y, 0);
-		if(move != 0.0)
+		Quaternion camRot = Quaternion.Euler(0.0f, Camera.main.transform.rotation.eulerAngles.y + Mathf.Atan(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")/(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")+0.0001f))*(180/Mathf.PI), 0);
+
+		if (TeamUtility.IO.InputManager.GetAxisRaw("Vertical") < 0)
 		{
-			this.transform.rotation = camRot;
+			this.transform.rotation = Quaternion.Euler(0.0f, camRot.eulerAngles.y + (180*Mathf.Sign(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")*-1)), 0);
+			this.transform.position += transform.forward * Speed * move * Time.deltaTime;
 		}
-		if (TeamUtility.IO.InputManager.GetAxisRaw("Vertical") > 0)
+		else if(move != 0.0f)
 		{
 			this.transform.rotation = camRot;
-			//this.transform.position += transform.forward * Speed * Time.deltaTime;
-		}
-		else if (TeamUtility.IO.InputManager.GetAxisRaw("Vertical") < 0)
-		{
-			this.transform.rotation = camRot;
-			//this.transform.position -= transform.forward * Speed * Time.deltaTime;
+			this.transform.position += transform.forward * Speed * move * Time.deltaTime;
 		}
 
-		if (TeamUtility.IO.InputManager.GetAxisRaw("Horizontal") < 0)
+		if(TeamUtility.IO.InputManager.GetButtonDown("Accept"))
 		{
-			this.transform.rotation = camRot;
-			//this.transform.position -= transform.right * Speed * Time.deltaTime;
+			GameObject.Find("NPC").GetComponent<CharacterController>().MoveTo(this.transform.position);
 		}
-		else if (TeamUtility.IO.InputManager.GetAxisRaw("Horizontal") > 0)
-		{
-			this.transform.rotation = camRot;
-			//this.transform.position += transform.right * Speed * Time.deltaTime;
-		}
-
 	}
 }

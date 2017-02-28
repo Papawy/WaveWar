@@ -45,7 +45,7 @@ public class MainMenuSelect : MonoBehaviour {
 	void Awake()
 	{
 		m_instance = this;
-		DontDestroyOnLoad(this);
+		//DontDestroyOnLoad(this);
 
 		m_activeMenu = null;
 		m_previousMenu = null;
