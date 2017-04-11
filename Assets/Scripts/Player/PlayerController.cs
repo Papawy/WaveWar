@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
 	public float Speed = 4.0f;
+    public GameObject AttackNote = null;
 
 	Animator anim;
 
@@ -36,5 +37,13 @@ public class PlayerController : MonoBehaviour {
 		{
 			GameObject.Find("NPC").GetComponent<CharacterController>().MoveTo(this.transform.position);
 		}
-	}
+
+        if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
+        {
+            GameObject attackNote = GameObject.Instantiate(AttackNote);
+            attackNote.transform.rotation = gameObject.transform.rotation;
+            attackNote.transform.position = gameObject.transform.position + Vector3.up;
+            attackNote.transform.position += gameObject.transform.forward;
+        }
+    }
 }

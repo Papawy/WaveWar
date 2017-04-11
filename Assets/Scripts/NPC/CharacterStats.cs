@@ -15,8 +15,12 @@ public class CharacterStats : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
+
+    void OnDeath()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
 
 	public void RemoveHealth(float health)
 	{
@@ -26,6 +30,7 @@ public class CharacterStats : MonoBehaviour {
 		{
 			Life = 0.0f;
 			Dead = true;
+            OnDeath();
 		}
 	}
 
