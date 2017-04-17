@@ -25,20 +25,24 @@ public class PlayerController : MonoBehaviour {
 		if (TeamUtility.IO.InputManager.GetAxisRaw("Vertical") < 0)
 		{
 			this.transform.rotation = Quaternion.Euler(0.0f, camRot.eulerAngles.y + (180*Mathf.Sign(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")*-1)), 0);
-			this.transform.position += transform.forward * Speed * move * Time.deltaTime;
+			//this.transform.position += transform.forward * Speed * move * Time.deltaTime;
 		}
 		else if(move != 0.0f)
 		{
 			this.transform.rotation = camRot;
-			this.transform.position += transform.forward * Speed * move * Time.deltaTime;
+			//this.transform.position += transform.forward * Speed * move * Time.deltaTime;
 		}
 
 		if(TeamUtility.IO.InputManager.GetButtonDown("Accept"))
 		{
-			GameObject.Find("NPC").GetComponent<CharacterController>().MoveTo(this.transform.position);
+			GameObject.Find("NPC_1").GetComponent<CharacterController>().MoveTo(this.transform.position);
+		}
+		if (TeamUtility.IO.InputManager.GetButtonDown("Cancel"))
+		{
+			GameObject.Find("NPC_1").GetComponent<CharacterController>().MoveToNode();
 		}
 
-        if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
+		if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
         {
             GameObject attackNote = GameObject.Instantiate(AttackNote);
             attackNote.transform.rotation = gameObject.transform.rotation;
