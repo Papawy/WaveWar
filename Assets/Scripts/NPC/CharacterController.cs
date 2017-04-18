@@ -36,28 +36,25 @@ public class CharacterController : MonoBehaviour {
 		if(moving)
 		{
 			gameObject.transform.forward = nextPos - gameObject.transform.position;
-			if(Mathf.Round(gameObject.transform.position.x) == Mathf.Round(nextPos.x) && Mathf.Round(gameObject.transform.position.y) == Mathf.Round(nextPos.y))
+			if(Mathf.Round(gameObject.transform.position.x) == Mathf.Round(nextPos.x) && Mathf.Round(gameObject.transform.position.z) == Mathf.Round(nextPos.z))
 			{
 				moving = false;
 				anim.SetFloat("Speed", 0.0f);
 				if(Behavior == BEHAVIOR.FOLLOWING_NODES)
 				{
 					System.Random rnd = new System.Random();
-					NPCNode prev = CurrentNode;
-					NPCNode tmp = prev;
-					while (tmp == prev)
+					NPCNode tmp = CurrentNode;
+					while (tmp == CurrentNode)
 						tmp = CurrentNode.ConnectedNodes[rnd.Next(CurrentNode.ConnectedNodes.Count)];
 					CurrentNode = tmp;
 
-					Debug.Log(CurrentNode.ToString());
 					MoveToNode();
 				}
-				Debug.Log("Stoping movement");
 			}
 			else
 			{
 				anim.SetFloat("Speed", 1.0f);
-				this.transform.position += transform.forward * Speed * 1.0f * Time.deltaTime;
+				//this.transform.position += transform.forward * Speed * 1.0f * Time.deltaTime;
 			}
 
 		}

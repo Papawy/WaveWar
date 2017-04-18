@@ -7,6 +7,8 @@ public class Attack : MonoBehaviour {
     public float Speed = 6.0f;
     public float MaxDistance = 15.0f;
     public float Damage = 20.0f;
+
+	public uint MaxBounces = 3;
     
     Vector3 initPos;
     Vector3 currPos;
@@ -36,5 +38,9 @@ public class Attack : MonoBehaviour {
             ColObj.gameObject.GetComponent<CharacterStats>().RemoveHealth(Damage);
             GameObject.Destroy(this.gameObject);
         }
+		if(MaxBounces == 0)
+			GameObject.Destroy(this.gameObject);
+		MaxBounces--;
+		Damage = Damage / 2;
     }
 }
