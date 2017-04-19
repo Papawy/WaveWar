@@ -42,5 +42,6 @@ public class Attack : MonoBehaviour {
 			GameObject.Destroy(this.gameObject);
 		MaxBounces--;
 		Damage = Damage / 2;
+		this.gameObject.transform.forward = Vector3.Reflect(this.gameObject.transform.position, ColObj.contacts[0].normal);
     }
 }

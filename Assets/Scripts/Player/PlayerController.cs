@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
+		
 	}
 	
 	// Update is called once per frame
@@ -42,12 +43,17 @@ public class PlayerController : MonoBehaviour {
 			GameObject.Find("NPC_1").GetComponent<CharacterController>().MoveToNode();
 		}
 
-		if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
-        {
-            GameObject attackNote = GameObject.Instantiate(AttackNote);
-            attackNote.transform.rotation = gameObject.transform.rotation;
-            attackNote.transform.position = gameObject.transform.position + Vector3.up;
-            attackNote.transform.position += gameObject.transform.forward;
-        }
+		if (TeamUtility.IO.InputAdapter.GetButton("Aim"))
+		{
+			this.transform.rotation = camRot;
+			if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
+			{
+				GameObject attackNote = GameObject.Instantiate(AttackNote);
+				attackNote.transform.rotation = Camera.main.transform.rotation;
+				attackNote.transform.position = gameObject.transform.position + Vector3.up;
+				attackNote.transform.position += gameObject.transform.forward;
+			}
+		}
+		
     }
 }
