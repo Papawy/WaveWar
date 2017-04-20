@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
 	public float Speed = 4.0f;
-    public GameObject AttackNote = null;
+    public GameObject[] AttackNotes = null;
 
 	Animator anim;
 
@@ -19,8 +19,7 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float move = (Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")) + Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")));
-		move = Mathf.Clamp(move, 0, 1);
-		anim.SetFloat("Speed", move);
+		move = Mathf.Clamp(move, 0.0f, 0.5f);
 		Quaternion camRot = Quaternion.Euler(0.0f, Camera.main.transform.rotation.eulerAngles.y + Mathf.Atan(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")/(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")+0.0001f))*(180/Mathf.PI), 0);
 
 		if (TeamUtility.IO.InputManager.GetAxisRaw("Vertical") < 0)
@@ -46,14 +45,22 @@ public class PlayerController : MonoBehaviour {
 		if (TeamUtility.IO.InputAdapter.GetButton("Aim"))
 		{
 			this.transform.rotation = camRot;
+			anim.SetBool("Guitar", true);
 			if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
 			{
-				GameObject attackNote = GameObject.Instantiate(AttackNote);
+				System.Random rnd = new System.Random();
+				GameObject attackNote = GameObject.Instantiate(AttackNotes[rnd.Next(AttackNotes.Length-1)]);
 				attackNote.transform.rotation = Camera.main.transform.rotation;
 				attackNote.transform.position = gameObject.transform.position + Vector3.up;
 				attackNote.transform.position += gameObject.transform.forward;
 			}
 		}
-		
-    }
+		else
+			anim.SetBool("Guitar", false);
+
+		if (TeamUtility.IO.InputAdapter.GetButton("Sprint"))
+			move = move * 2;
+
+		anim.SetFloat("Speed", move);
+	}
 }
