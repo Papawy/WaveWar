@@ -22,14 +22,22 @@ public class FlatSelfGeneration : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		/*if (Debug.isDebugBuild)
+		{
+			Vector3 predPos = this.gameObject.transform.position;
+			foreach (GameObject floor in m_building)
+			{
+				Debug.DrawLine(predPos, floor.transform.position, Color.blue);
+				predPos = floor.transform.position;
+			}
+		}*/
 	}
 
 	public void Generate(int height)
 	{
 		m_building.Clear();
 
-		System.Random rnd = new System.Random();
+		System.Random rnd = GameObject.Find("GlobalManager").GetComponent<GlobalScript>().Random;
 
 		m_building.Add((GameObject)Instantiate(Grounds[rnd.Next(0, Grounds.Count)], gameObject.transform.position, gameObject.transform.rotation));
 		int idx = 0;

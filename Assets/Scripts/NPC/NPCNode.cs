@@ -8,12 +8,31 @@ public class NPCNode : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		if (this.gameObject.GetComponent<MeshRenderer>() != null)
+			this.gameObject.GetComponent<MeshRenderer>().enabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(Debug.isDebugBuild)
+		{
+			foreach (NPCNode node in ConnectedNodes)
+			{
+				Debug.DrawLine(this.gameObject.transform.position, node.gameObject.transform.position, Color.red);
+			}
+		}
+	}
+
+	void OnDrawGizmosSelected()
+	{
+		if (Debug.isDebugBuild)
+		{
+			foreach (NPCNode node in ConnectedNodes)
+			{
+				Gizmos.color = Color.red;
+				Gizmos.DrawLine(this.gameObject.transform.position, node.gameObject.transform.position);
+			}
+		}
 	}
 
 	public bool ConnectTo(NPCNode other)

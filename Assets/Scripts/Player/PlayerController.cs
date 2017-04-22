@@ -10,14 +10,31 @@ public class PlayerController : MonoBehaviour {
 
 	Animator anim;
 
+	GameObject m_preInterObjHit = null;
+
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (m_preInterObjHit != null)
+		{
+			m_preInterObjHit.GetComponentInChildren<Marker2D>().ToggleMarker(false);
+		}
+
+		RaycastHit rayHit;
+		if (Physics.Raycast(transform.position+Vector3.up, transform.forward, out rayHit, 5.0f))
+		{
+			if(rayHit.transform.gameObject.GetComponent<InteractionManager>() != null)
+			{
+				m_preInterObjHit = rayHit.transform.gameObject;
+				rayHit.transform.gameObject.GetComponentInChildren<Marker2D>().ToggleMarker(true);
+			}
+		}
+
 		float move = (Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")) + Mathf.Abs(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")));
 		move = Mathf.Clamp(move, 0.0f, 0.5f);
 		Quaternion camRot = Quaternion.Euler(0.0f, Camera.main.transform.rotation.eulerAngles.y + Mathf.Atan(TeamUtility.IO.InputManager.GetAxisRaw("Horizontal")/(TeamUtility.IO.InputManager.GetAxisRaw("Vertical")+0.0001f))*(180/Mathf.PI), 0);
@@ -41,6 +58,11 @@ public class PlayerController : MonoBehaviour {
 		{
 			GameObject.Find("NPC_1").GetComponent<CharacterController>().MoveToNode();
 		}
+		if (m_preInterObjHit != null && TeamUtility.IO.InputManager.GetButtonDown("Interact"))
+		{
+			m_preInterObjHit.GetComponent<InteractionManager>().Interact();
+		}
+
 
 		if (TeamUtility.IO.InputAdapter.GetButton("Aim"))
 		{
@@ -49,10 +71,11 @@ public class PlayerController : MonoBehaviour {
 			if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
 			{
 				System.Random rnd = new System.Random();
-				GameObject attackNote = GameObject.Instantiate(AttackNotes[rnd.Next(AttackNotes.Length-1)]);
+				GameObject attackNote = GameObject.Instantiate(AttackNotes[rnd.Next(AttackNotes.Length)]);
 				attackNote.transform.rotation = Camera.main.transform.rotation;
 				attackNote.transform.position = gameObject.transform.position + Vector3.up;
 				attackNote.transform.position += gameObject.transform.forward;
+				attackNote.GetComponent<Rigidbody>().velocity = attackNote.transform.forward * 10;
 			}
 		}
 		else
