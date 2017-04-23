@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		RaycastHit rayHit;
-		if (Physics.Raycast(transform.position+Vector3.up, transform.forward, out rayHit, 5.0f))
+		if (Physics.Raycast(transform.position+Vector3.up, transform.forward, out rayHit, 3.0f))
 		{
 			if(rayHit.transform.gameObject.GetComponent<InteractionManager>() != null)
 			{

@@ -28,14 +28,14 @@ public class Marker2D : MonoBehaviour {
 				if (this.transform.localPosition.y > m_originalPosY + YVariation)
 					m_up = false;
 				else
-					this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y + (YVariation / 10) * Time.deltaTime, this.transform.localPosition.z);
+					this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y + YVariation * Time.deltaTime, this.transform.localPosition.z);
 			}
 			else
 			{
 				if (this.transform.localPosition.y < m_originalPosY)
 					m_up = true;
 				else
-					this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - (YVariation / 10) * Time.deltaTime, this.transform.localPosition.z);
+					this.transform.localPosition = new Vector3(this.transform.localPosition.x, this.transform.localPosition.y - YVariation * Time.deltaTime, this.transform.localPosition.z);
 			}
 		}
 	}
