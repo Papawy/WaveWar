@@ -8,13 +8,13 @@ public class NPCNode : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (this.gameObject.GetComponent<MeshRenderer>() != null)
+		if (this.gameObject.GetComponent<MeshRenderer>() != null && !GlobalScript.DebugMode)
 			this.gameObject.GetComponent<MeshRenderer>().enabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Debug.isDebugBuild)
+		if(Debug.isDebugBuild || GlobalScript.DebugMode)
 		{
 			foreach (NPCNode node in ConnectedNodes)
 			{
@@ -25,7 +25,7 @@ public class NPCNode : MonoBehaviour {
 
 	void OnDrawGizmosSelected()
 	{
-		if (Debug.isDebugBuild)
+		if (Debug.isDebugBuild || GlobalScript.DebugMode)
 		{
 			foreach (NPCNode node in ConnectedNodes)
 			{

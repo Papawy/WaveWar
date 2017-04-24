@@ -37,7 +37,7 @@ public class FlatSelfGeneration : MonoBehaviour {
 	{
 		m_building.Clear();
 
-		System.Random rnd = GameObject.Find("GlobalManager").GetComponent<GlobalScript>().Random;
+		System.Random rnd = GlobalScript.Random;
 
 		m_building.Add((GameObject)Instantiate(Grounds[rnd.Next(0, Grounds.Count)], gameObject.transform.position, gameObject.transform.rotation));
 		int idx = 0;

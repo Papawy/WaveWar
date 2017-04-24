@@ -20,6 +20,8 @@ public class MainMenuSelect : MonoBehaviour {
 	private GameObject m_activeMenu;
 	private GameObject m_previousMenu;
 
+	private bool m_joystick = false;
+
 	public void OnMenuSelect(GameObject button)
 	{
 		source.PlayOneShot(selectSound, Volume);
@@ -39,6 +41,18 @@ public class MainMenuSelect : MonoBehaviour {
 		else if(button.name == "btn_quit")
 		{
 			Application.Quit();
+		}
+		else if(button.name == "btn_changeInput" && !m_joystick)
+		{
+			TeamUtility.IO.InputManager.SetInputConfiguration("Joystick", TeamUtility.IO.PlayerID.One);
+			m_joystick = true;
+			button.GetComponent<Text>().text = "Manette : OUI";
+		}
+		else if(button.name == "btn_changeInput" && m_joystick)
+		{
+			TeamUtility.IO.InputManager.SetInputConfiguration("KeyboardAndMouse", TeamUtility.IO.PlayerID.One);
+			m_joystick = false;
+			button.GetComponent<Text>().text = "Manette : NON";
 		}
 	}
 

@@ -58,7 +58,7 @@ public class CharacterController : MonoBehaviour {
 				anim.SetFloat("Speed", 0.0f);
 				if(Behavior == BEHAVIOR.FOLLOWING_NODES)
 				{
-					System.Random rnd = GameObject.Find("GlobalManager").GetComponent<GlobalScript>().Random;
+					System.Random rnd = GlobalScript.Random;
 					NPCNode tmp = CurrentNode;
 					while (tmp == CurrentNode)
 						tmp = CurrentNode.ConnectedNodes[rnd.Next(CurrentNode.ConnectedNodes.Count)];

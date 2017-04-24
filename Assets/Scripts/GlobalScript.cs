@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GlobalScript : MonoBehaviour {
 
-	public System.Random Random = new System.Random();
+	public static System.Random Random = new System.Random();
+
+	public static bool DebugMode = false;
 
 	// Use this for initialization
 	void Start () {
@@ -14,5 +16,10 @@ public class GlobalScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public static bool IsPlayerUsingController()
+	{
+		return TeamUtility.IO.InputManager.PlayerOneConfiguration.name == "Joystick";
 	}
 }

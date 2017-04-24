@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : CharacterStats {
-
-	public UnityEngine.UI.Slider LifeBar;
+public class OptionMenuSelect : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +11,6 @@ public class PlayerStats : CharacterStats {
 	
 	// Update is called once per frame
 	void Update () {
-		LifeBar.value = Life/100;
+		
 	}
 }

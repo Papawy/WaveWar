@@ -6,11 +6,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
 	public float Speed = 4.0f;
-    public GameObject[] AttackNotes = null;
 
 	Animator anim;
 
 	GameObject m_preInterObjHit = null;
+
+	public GameObject AttackLabel = null;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +51,12 @@ public class PlayerController : MonoBehaviour {
 			//this.transform.position += transform.forward * Speed * move * Time.deltaTime;
 		}
 
-		if(TeamUtility.IO.InputManager.GetButtonDown("Accept"))
+		if (TeamUtility.IO.InputManager.GetButtonDown("DebugMode"))
+		{
+			GlobalScript.DebugMode = true;
+		}
+
+		if (TeamUtility.IO.InputManager.GetButtonDown("Accept"))
 		{
 			GameObject.Find("NPC_1").GetComponent<CharacterController>().MoveTo(this.transform.position);
 		}
@@ -62,7 +68,52 @@ public class PlayerController : MonoBehaviour {
 		{
 			m_preInterObjHit.GetComponent<InteractionManager>().Interact();
 		}
+		if(TeamUtility.IO.InputManager.GetButton("Interact") && GlobalScript.DebugMode)
+		{
+			this.gameObject.GetComponent<PlayerStats>().Life -= 0.5f;
+		}
 
+		if (TeamUtility.IO.InputManager.GetButtonDown("NextWeapon"))
+		{
+			switch(this.gameObject.GetComponent<AttackManager>().CurrentAttackType)
+			{
+				case AttackManager.TYPE.NORMAL:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.PRECISION;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Si (précision)";
+					break;
+
+				case AttackManager.TYPE.PRECISION:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.LARGE;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Do (large)";
+					break;
+
+				case AttackManager.TYPE.LARGE:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.NORMAL;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Sol (normal)";
+					break;
+			}
+		}
+
+		if (TeamUtility.IO.InputManager.GetButtonDown("PrevWeapon"))
+		{
+			switch (this.gameObject.GetComponent<AttackManager>().CurrentAttackType)
+			{
+				case AttackManager.TYPE.NORMAL:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.LARGE;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Do (large)";
+					break;
+
+				case AttackManager.TYPE.PRECISION:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.NORMAL;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Sol (normal)";
+					break;
+
+				case AttackManager.TYPE.LARGE:
+					this.gameObject.GetComponent<AttackManager>().CurrentAttackType = AttackManager.TYPE.PRECISION;
+					AttackLabel.GetComponent<UnityEngine.UI.Text>().text = "Si (précision)";
+					break;
+			}
+		}
 
 		if (TeamUtility.IO.InputAdapter.GetButton("Aim"))
 		{
@@ -70,12 +121,7 @@ public class PlayerController : MonoBehaviour {
 			anim.SetBool("Guitar", true);
 			if (TeamUtility.IO.InputManager.GetButtonDown("Attack"))
 			{
-				System.Random rnd = new System.Random();
-				GameObject attackNote = GameObject.Instantiate(AttackNotes[rnd.Next(AttackNotes.Length)]);
-				attackNote.transform.rotation = Camera.main.transform.rotation;
-				attackNote.transform.position = gameObject.transform.position + Vector3.up;
-				attackNote.transform.position += gameObject.transform.forward;
-				attackNote.GetComponent<Rigidbody>().velocity = attackNote.transform.forward * 10;
+				this.gameObject.GetComponent<AttackManager>().LaunchAttack();
 			}
 		}
 		else

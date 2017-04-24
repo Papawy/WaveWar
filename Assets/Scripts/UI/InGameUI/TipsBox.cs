@@ -14,7 +14,10 @@ public class TipsBox : MonoBehaviour {
 		if(TextTipsBox != null)
 		{
 			TextTipsBox.gameObject.SetActive(false);
-			ShowTips("ZQSD pour vous déplacer\r\nClique droit pour viser\r\nClique gauche pour tirer\r\nE pour intéragir avec l'environnement", 5000);
+			if(!GlobalScript.IsPlayerUsingController())
+				ShowTips("ZQSD pour vous déplacer\r\nClic droit pour viser\r\nClic gauche pour tirer\r\nE pour interagir avec l'environnement\r\nShift pour courrir", 8000);
+			else
+				ShowTips("Stick gauche pour vous déplacer\r\nLT pour viser\r\nRT pour tirer\r\nY pour interagir avec l'environnement\r\nA pour courrir", 8000);
 		}
 	}
 	
