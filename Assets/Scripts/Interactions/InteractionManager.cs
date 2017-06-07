@@ -11,7 +11,8 @@ public class InteractionManager : MonoBehaviour {
 	public enum TYPE
 	{
 		NONE,
-		NPC_CITY
+		NPC_CITY,
+        MISSION
 	}
 
 	// Use this for initialization
@@ -23,6 +24,9 @@ public class InteractionManager : MonoBehaviour {
 			case TYPE.NPC_CITY:
 				m_interaction = this.gameObject.AddComponent<CityNPCInteraction>();
 				break;
+            case TYPE.MISSION:
+                m_interaction = this.gameObject.AddComponent<MissionManager>();
+                break;
 		}
 	}
 	

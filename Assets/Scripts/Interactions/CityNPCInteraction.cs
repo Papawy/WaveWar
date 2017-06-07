@@ -21,6 +21,17 @@ public class CityNPCInteraction : InteractionBase {
 
 	public override void OnInteract()
 	{
-		Debug.Log("Beep Boop");
+        switch(GlobalScript.Random.Next(3))
+        {
+            case 0:
+                GameObject.Find("HeroeTest").GetComponent<TipsBox>().ShowTips("NPC : J'ai pas de temps à perdre avec vous !");
+                break;
+            case 1:
+                GameObject.Find("HeroeTest").GetComponent<TipsBox>().ShowTips("NPC : J'ai pas de monnaie sur moi !");
+                break;
+            case 2:
+                GameObject.Find("HeroeTest").GetComponent<TipsBox>().ShowTips("NPC : Dégagez le chemin espèce de vil malandrin !");
+                break;
+        }
 	}
 }
