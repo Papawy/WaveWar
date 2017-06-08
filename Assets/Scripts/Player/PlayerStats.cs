@@ -13,6 +13,6 @@ public class PlayerStats : CharacterStats {
 	
 	// Update is called once per frame
 	void Update () {
-		LifeBar.value = Life/100;
+		LifeBar.value = Life;
 	}
 }

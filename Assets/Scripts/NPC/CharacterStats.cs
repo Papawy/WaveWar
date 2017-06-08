@@ -8,6 +8,10 @@ public class CharacterStats : MonoBehaviour {
 	public float MaxLife = 100.0f;
 	public bool Dead = false;
 
+    public uint DeadTime = 5000;
+    private uint deadTime = 0;
+	private bool isDying = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -15,11 +19,16 @@ public class CharacterStats : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(isDying && (uint)(Time.time * 1000) - deadTime > DeadTime)
+        {
+            GameObject.Destroy(this.gameObject);
+        }
 	}
 
     void OnDeath()
     {
-        GameObject.Destroy(this.gameObject);
+        deadTime = (uint)(Time.time * 1000);
+		isDying = true;
     }
 
 	public void RemoveHealth(float health)

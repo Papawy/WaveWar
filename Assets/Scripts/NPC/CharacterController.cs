@@ -17,6 +17,12 @@ public class CharacterController : MonoBehaviour {
 
 	public NPCNode CurrentNode = null;
 
+    public uint RaycastUpdateTime = 250;
+	public float RaycastDistance = 3.0f;
+    private uint lastRaycast = 0;
+	private bool avoidingProc = false;
+	private int avoidingDir = 0;
+
 	public enum BEHAVIOR
 	{
 		FOLLOWING_NODES, // Follow random nodes
@@ -48,9 +54,11 @@ public class CharacterController : MonoBehaviour {
 		if(MarkerText != null)
 			MarkerText.transform.LookAt(Camera.main.transform);
 
+		if(avoidingProc == false)
+			gameObject.transform.forward = nextPos - gameObject.transform.position;
+
 		if (moving)
 		{
-			gameObject.transform.forward = nextPos - gameObject.transform.position;
 			if(Mathf.Round(gameObject.transform.position.x) == Mathf.Round(nextPos.x) && Mathf.Round(gameObject.transform.position.z) == Mathf.Round(nextPos.z))
 			{
 				moving = false;
@@ -60,11 +68,17 @@ public class CharacterController : MonoBehaviour {
 				{
 					System.Random rnd = GlobalScript.Random;
 					NPCNode tmp = CurrentNode;
-					while (tmp == CurrentNode)
-						tmp = CurrentNode.ConnectedNodes[rnd.Next(CurrentNode.ConnectedNodes.Count)];
-					CurrentNode = tmp;
+					if (CurrentNode.ConnectedNodes.Count != 0)
+					{
+						while (tmp == CurrentNode)
+							tmp = CurrentNode.ConnectedNodes[rnd.Next(CurrentNode.ConnectedNodes.Count)];
+						CurrentNode = tmp;
 
-					MoveToNode();
+						MoveToNode();
+					}
+					else
+						Behavior = BEHAVIOR.NEUTRAL;
+
 				}
 			}
 			else
@@ -83,6 +97,119 @@ public class CharacterController : MonoBehaviour {
 						break;
 					case DEPLACEMENT.CROUCHING:
 						break;
+				}
+				if ((uint)(Time.time * 1000) - lastRaycast >= RaycastUpdateTime)
+				{
+					Vector3 positon = gameObject.transform.position + Vector3.up / 2;
+					if (avoidingProc)
+					{
+						switch(avoidingDir)
+						{
+							case 1:
+								if (Physics.Raycast(positon, (gameObject.transform.forward - gameObject.transform.right) / 2, RaycastDistance))
+								{
+									gameObject.transform.forward = (gameObject.transform.forward + gameObject.transform.right) / 2;
+									avoidingDir = 1;
+								}
+								else
+								{
+									gameObject.transform.forward = nextPos - gameObject.transform.position;
+									avoidingProc = false;
+									avoidingDir = 0;
+								}
+								break;
+							case 2:
+								if (Physics.Raycast(positon, -gameObject.transform.right, RaycastDistance))
+								{
+									gameObject.transform.forward = gameObject.transform.right;
+									avoidingDir = 2;
+								}
+								else
+								{
+									gameObject.transform.forward = nextPos - gameObject.transform.position;
+									avoidingProc = false;
+									avoidingDir = 0;
+								}
+								break;
+							case -1:
+								if (Physics.Raycast(positon, (gameObject.transform.forward + gameObject.transform.right) / 2, RaycastDistance))
+								{
+									gameObject.transform.forward = (gameObject.transform.forward - gameObject.transform.right) / 2;
+									avoidingDir = -1;
+								}
+								else
+								{
+									gameObject.transform.forward = nextPos - gameObject.transform.position;
+									avoidingProc = false;
+									avoidingDir = 0;
+								}
+								break;
+							case -2:
+								if (Physics.Raycast(positon, gameObject.transform.right, RaycastDistance))
+								{
+									gameObject.transform.forward = -gameObject.transform.right;
+									avoidingDir = -2;
+								}
+								else
+								{
+									gameObject.transform.forward = nextPos - gameObject.transform.position;
+									avoidingProc = false;
+									avoidingDir = 0;
+								}
+								break;
+							default:
+
+								break;
+						}
+					}
+					else
+					{
+						if (Physics.Raycast(positon, gameObject.transform.forward, RaycastDistance) ||
+						Physics.Raycast(positon, (gameObject.transform.forward * 4 + gameObject.transform.right) / 5, RaycastDistance) ||
+						Physics.Raycast(positon, (gameObject.transform.forward * 4 - gameObject.transform.right) / 5, RaycastDistance))
+						{
+							if (Physics.Raycast(positon, (gameObject.transform.forward + gameObject.transform.right) / 2, RaycastDistance))
+							{
+								if (Physics.Raycast(positon, gameObject.transform.right, RaycastDistance))
+								{
+									if (Physics.Raycast(positon, (gameObject.transform.forward - gameObject.transform.right) / 2, RaycastDistance))
+									{
+										if (Physics.Raycast(positon, -gameObject.transform.right, RaycastDistance))
+										{
+										}
+										else
+										{
+											gameObject.transform.forward = -gameObject.transform.right;
+											avoidingDir = -2;
+										}
+									}
+									else
+									{
+										gameObject.transform.forward = (gameObject.transform.forward - gameObject.transform.right) / 2;
+										avoidingDir = -1;
+									}
+								}
+								else
+								{
+									gameObject.transform.forward = gameObject.transform.right;
+									avoidingDir = 2;
+								}
+							}
+							else
+							{
+								gameObject.transform.forward = (gameObject.transform.forward + gameObject.transform.right) / 2;
+								avoidingDir = 1;
+							}
+							avoidingProc = true;
+						}
+						else
+						{
+							gameObject.transform.forward = nextPos - gameObject.transform.position;
+							avoidingProc = false;
+							avoidingDir = 0;
+						}
+					}
+					lastRaycast = (uint)(Time.time * 1000);
 				}
 				//this.transform.position += transform.forward * Speed * 1.0f * Time.deltaTime;
 			}

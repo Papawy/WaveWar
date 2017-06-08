@@ -19,7 +19,7 @@ public class Attack : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         initPos = gameObject.transform.position;
-		creationTime = (uint)(Time.time * 100);
+		creationTime = (uint)(Time.time * 1000);
 	}
 	
 	// Update is called once per frame
@@ -29,7 +29,7 @@ public class Attack : MonoBehaviour {
         {
             //gameObject.transform.position += gameObject.transform.forward * Speed * Time.deltaTime;
         }
-		else if((uint)(Time.time*100) - creationTime > LifeTime)
+		else if((uint)(Time.time*1000) - creationTime > LifeTime)
 		{
 			GameObject.Destroy(this.gameObject);
 		}
