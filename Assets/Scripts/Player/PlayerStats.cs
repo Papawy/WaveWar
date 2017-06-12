@@ -14,5 +14,15 @@ public class PlayerStats : CharacterStats {
 	// Update is called once per frame
 	void Update () {
 		LifeBar.value = Life;
+		/*if(Life <= 0)
+		{
+			
+		}*/
+	}
+
+	protected override void OnDeath()
+	{
+		Dead = true;
+		this.gameObject.GetComponent<Animator>().SetBool("Dead", true);
 	}
 }

@@ -35,8 +35,17 @@ public class MainMenuSelect : MonoBehaviour {
 		}
 		else if(button.name == "btn_new_game")
 		{
-			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
-			sceneOp.allowSceneActivation = true;
+			if(SaveManager.FindUnusedSave() != -1)
+			{
+				int slot = SaveManager.FindUnusedSave();
+				SaveManager.Saves[slot] = new SaveGame(Application.persistentDataPath + "/Saves/SaveGame" + slot+".sav");
+				SaveManager.SetActiveSave(slot);
+				var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+				sceneOp.allowSceneActivation = true;
+			}
+			else
+				source.PlayOneShot(backSound, Volume);
+
 		}
 		else if(button.name == "btn_quit")
 		{
@@ -47,12 +56,60 @@ public class MainMenuSelect : MonoBehaviour {
 			TeamUtility.IO.InputManager.SetInputConfiguration("Joystick", TeamUtility.IO.PlayerID.One);
 			m_joystick = true;
 			button.GetComponent<Text>().text = "Manette : OUI";
+			ControllerManager.ActiveJoystick();
 		}
 		else if(button.name == "btn_changeInput" && m_joystick)
 		{
 			TeamUtility.IO.InputManager.SetInputConfiguration("KeyboardAndMouse", TeamUtility.IO.PlayerID.One);
 			m_joystick = false;
 			button.GetComponent<Text>().text = "Manette : NON";
+			ControllerManager.ActiveKeyboard();
+		}
+		else if(button.name == "btn_save_1")
+		{
+			if (!SaveManager.SetActiveSave(0))
+			{
+				SaveManager.Saves[0] = new SaveGame(Application.persistentDataPath + "/Saves/SaveGame0.sav");
+				SaveManager.SetActiveSave(0);
+			}
+				
+
+			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+			sceneOp.allowSceneActivation = true;
+		}
+		else if (button.name == "btn_save_2")
+		{
+			if (!SaveManager.SetActiveSave(1))
+			{
+				SaveManager.Saves[1] = new SaveGame(Application.persistentDataPath + "/Saves/SaveGame1.sav");
+				SaveManager.SetActiveSave(1);
+			}
+
+
+			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+			sceneOp.allowSceneActivation = true;
+		}
+		else if (button.name == "btn_save_3")
+		{
+			if (!SaveManager.SetActiveSave(2))
+			{
+				SaveManager.Saves[2] = new SaveGame(Application.persistentDataPath + "/Saves/SaveGame2.sav");
+				SaveManager.SetActiveSave(2);
+			}
+				
+			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+			sceneOp.allowSceneActivation = true;
+		}
+		else if (button.name == "btn_save_4")
+		{
+			if (!SaveManager.SetActiveSave(3))
+			{
+				SaveManager.Saves[3] = new SaveGame(Application.persistentDataPath + "/Saves/SaveGame3.sav");
+				SaveManager.SetActiveSave(3);
+			}
+				
+			var sceneOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("city_main");
+			sceneOp.allowSceneActivation = true;
 		}
 	}
 
@@ -69,6 +126,35 @@ public class MainMenuSelect : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if (ControllerManager.JoystickActivated && ControllerManager.IsPlayerUsingController() == false)
+			ControllerManager.ActiveJoystick();
+
+		if(ControllerManager.JoystickActivated)
+		{
+			GameObject.Find("btn_changeInput").GetComponent<Text>().text = "Manette : OUI";
+			m_joystick = true;
+		}
+		SaveManager.LoadSaves();
+		if (SaveManager.Saves[0] != null)
+		{
+			GameObject.Find("btn_save_1").GetComponent<Text>().text = SaveManager.Saves[0].SaveDate.ToString();
+			Debug.Log(SaveManager.Saves[0].SaveDate.ToString());
+		}
+		if (SaveManager.Saves[1] != null)
+		{
+			GameObject.Find("btn_save_2").GetComponent<Text>().text = SaveManager.Saves[1].SaveDate.ToString();
+		}
+		if (SaveManager.Saves[2] != null)
+		{
+			GameObject.Find("btn_save_3").GetComponent<Text>().text = SaveManager.Saves[2].SaveDate.ToString();
+		}
+		if (SaveManager.Saves[3] != null)
+		{
+			GameObject.Find("btn_save_4").GetComponent<Text>().text = SaveManager.Saves[3].SaveDate.ToString();
+		}
+
+
+
 	}
 	
 	// Update is called once per frame

@@ -14,13 +14,13 @@ public class NPCNode : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Debug.isDebugBuild || GlobalScript.DebugMode)
+		/*if(Debug.isDebugBuild || GlobalScript.DebugMode)
 		{
 			foreach (NPCNode node in ConnectedNodes)
 			{
 				Debug.DrawLine(this.gameObject.transform.position, node.gameObject.transform.position, Color.red);
 			}
-		}
+		}*/
 	}
 
 	void OnDrawGizmosSelected()

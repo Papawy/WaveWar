@@ -8,7 +8,7 @@ public class CharacterStats : MonoBehaviour {
 	public float MaxLife = 100.0f;
 	public bool Dead = false;
 
-    public uint DeadTime = 5000;
+    public uint DeadTime = 10000;
     private uint deadTime = 0;
 	private bool isDying = false;
 
@@ -21,14 +21,17 @@ public class CharacterStats : MonoBehaviour {
 	void Update () {
         if(isDying && (uint)(Time.time * 1000) - deadTime > DeadTime)
         {
+			GameObject.Find("GlobalManager").GetComponent<NPCSpawner>().SpawnedNPC -= 1;
             GameObject.Destroy(this.gameObject);
         }
 	}
 
-    void OnDeath()
+    protected virtual void OnDeath()
     {
         deadTime = (uint)(Time.time * 1000);
 		isDying = true;
+		Dead = true;
+		this.gameObject.GetComponent<Animator>().SetBool("Dead", true);
     }
 
 	public void RemoveHealth(float health)

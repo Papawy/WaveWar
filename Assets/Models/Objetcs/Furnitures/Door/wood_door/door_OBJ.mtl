@@ -1,0 +1,27 @@
+newmtl blinn3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd door_UVs2PSD.tga
+bump door_MERGEDnormal.tga -bm 0.112782
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks door_brassSPECULAR.tga
+newmtl blinn4SG
+illum 4
+Kd 0.65 0.65 0.65
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+bump door_MERGEDnormal.tga -bm 0.037594
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks door_UVs2PSDiNVERT.tga
+newmtl file2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd door_UVs2PSD.tga
+bump door_MERGEDnormal.tga -bm 0.413534
+Ni 1.00

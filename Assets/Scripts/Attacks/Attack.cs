@@ -6,7 +6,7 @@ public class Attack : MonoBehaviour {
 
     public float Speed = 6.0f;
     public float MaxDistance = 15.0f;
-    public float Damage = 20.0f;
+    public float Damage = 30.0f;
 	public uint LifeTime = 20000;
 
 	public uint MaxBounces = 3;
@@ -46,7 +46,17 @@ public class Attack : MonoBehaviour {
             ColObj.gameObject.GetComponent<CharacterStats>().RemoveHealth(Damage);
             GameObject.Destroy(this.gameObject);
         }
-		if(MaxBounces == 0)
+		else if(ColObj.gameObject.tag == "hero")
+		{
+			ColObj.gameObject.GetComponent<PlayerStats>().RemoveHealth(Damage);
+			GameObject.Destroy(this.gameObject);
+		}
+		else if (ColObj.gameObject.tag == "enemy")
+		{
+			ColObj.gameObject.GetComponent<CharacterStats>().RemoveHealth(Damage);
+			GameObject.Destroy(this.gameObject);
+		}
+		if (MaxBounces == 0)
 			GameObject.Destroy(this.gameObject);
 		MaxBounces--;
 		Damage = Damage / 2;

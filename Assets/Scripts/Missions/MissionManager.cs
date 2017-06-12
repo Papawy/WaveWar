@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MissionManager : InteractionBase {
 
-    public ObjectiveKillNPC objective = null;
+    public Mission mission = null;
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +13,7 @@ public class MissionManager : InteractionBase {
 	
 	// Update is called once per frame
 	void Update () {
-		if(objective != null && objective.IsCompleted)
+		if(mission != null && mission.IsCompleted)
         {
             GameObject.Find("HeroeTest").GetComponent<TipsBox>().ShowTips("Vous avez réussi la mission !");
             GameObject.Destroy(this.gameObject);
@@ -23,12 +23,16 @@ public class MissionManager : InteractionBase {
 
     public void LaunchMission()
     {
-        objective = this.gameObject.AddComponent<ObjectiveKillNPC>();
-        objective.TargetNPC = GameObject.Find("NPCs/NPC_1");
-        objective.StartObjective();
+		mission.StartMission();
     }
 
-    public override void OnInteract()
+	public void LaunchMission(Mission t_mission)
+	{
+		mission = t_mission;
+		mission.StartMission();
+	}
+
+	public override void OnInteract()
     {
         LaunchMission();
     }

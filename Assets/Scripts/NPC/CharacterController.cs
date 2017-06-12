@@ -51,6 +51,14 @@ public class CharacterController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (Vector3.Distance(GameObject.Find("HeroeTest").transform.position, this.gameObject.transform.position) > 100.0f)
+		{
+			GameObject.Find("GlobalManager").GetComponent<NPCSpawner>().SpawnedNPC -= 1;
+			Destroy(this.gameObject);
+		}
+			
+			
+
 		if(MarkerText != null)
 			MarkerText.transform.LookAt(Camera.main.transform);
 

@@ -31,7 +31,7 @@ public class MenuSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!textArray[m_currMenSel].GetComponent<BtnOverring>().IsMoving())
+		if(textArray[m_currMenSel].GetComponent<BtnOverring>().IsMoving() == false)
 		{
 			if (TeamUtility.IO.InputManager.GetAxisRaw("MenuVertical") == -1 && Time.time - m_timer > 0.20)
 			{
